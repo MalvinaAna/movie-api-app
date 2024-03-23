@@ -32,21 +32,21 @@
             <td>/movies/[title]</td>
             <td>GET</td>
             <td>None</td>
-            <td>A JSON object holding data about the movie, containg the title, description, genre, year, duration, director of the movie. Example: 
+            <td>A JSON object holding data about the movie, containg the title, description, genre, director of the movie and if the movie is featured. Example: 
                 <br>{
-                    <br>&ensp;'title': 'The Truman Show',
-                    <br>&ensp;description': 'An insurance salesman discovers his whole life is actually a reality TV show.',
-                    <br>&ensp;'genre': {
-                        <br>&emsp;'name': 'Comedy',
-                        <br>&emsp;'description': 'Comedy film is a genre of film in which the main emphasis is on humor.'
+                    <br>&ensp;'Title': 'The Truman Show',
+                    <br>&ensp;Description': 'An insurance salesman discovers his whole life is actually a reality TV show.',
+                    <br>&ensp;'Genre': {
+                        <br>&emsp;'Name': 'Comedy',
+                        <br>&emsp;'Description': 'Comedy film is a genre of film in which the main emphasis is on humor.'
                     <br>&ensp;},
-                    <br>&ensp;'year': '1998',
-                    <br>&ensp;'duration': '1h 43min',
-                    <br>&ensp;'director': {
-                        <br>&emsp;'name': 'Peter Weir',
-                        <br>&emsp;'bio': 'Peter Weir was born on August 21, 1944 in Sydney, New South Wales, Australia. He is a director and writer, known for Master and Commander: The Far Side of the World (2003), The Way Back (2010) and Witness (1985). He has been married to Wendy Stites since 1966.',
-                        <br>&emsp;'birth': 'August 21, 1944'
-                    <br>&ensp;}
+                    <br>&ensp;'Director': {
+                        <br>&emsp;'Name': 'Peter Weir',
+                        <br>&emsp;'Bio': 'Peter Weir was born on August 21, 1944 in Sydney, New South Wales, Australia. He is a director and writer, known for Master and Commander: The Far Side of the World (2003), The Way Back (2010) and Witness (1985). He has been married to Wendy Stites since 1966.',
+                        <br>&emsp;'Birth': 'August 21, 1944',
+                        <br>&emsp;'Death': null
+                    <br>&ensp;},
+                    <br>&ensp;'Featured': true
                 <br>}</td>
         </tr>
         <tr>
@@ -56,8 +56,8 @@
             <td>None</td>
             <td>A JSON object holding data about a genre, contating the name and description of the genre. Example: 
                 <br>{
-                    <br>&ensp;'name': 'Drama',
-                    <br>&ensp;'description': 'In film and television, drama is a category or genre of narrative fiction (or semi-fiction) intended to be more serious than humorous in tone.'
+                    <br>&ensp;'Name': 'Drama',
+                    <br>&ensp;'Description': 'In film and television, drama is a category or genre of narrative fiction (or semi-fiction) intended to be more serious than humorous in tone.'
                 <br>}</td>
         </tr>
         <tr>
@@ -65,11 +65,12 @@
             <td>/movies/director/[directorName]</td>
             <td>GET</td>
             <td>None</td>
-            <td>A JSON object holding data about a director, containg the name, bio and birth date of the director. Example:
+            <td>A JSON object holding data about a director, containg the name, bio, birth date and death date of the director. Example:
                 <br>{
-                <br>&ensp;'name': 'Mimi Leder',
-                <br>&ensp;'bio': 'Miriam Leder is an American film and television director and producer; she is noted for her action films and use of special effects. She has directed the films The Peacemaker (1997), Deep Impact (1998), Pay It Forward (2000), and On the Basis of Sex (2018). She was the first female graduate of the AFI Conservatory, in 1973. She has been nominated for ten Emmy Awards, winning two',
-                <br>&ensp;'birth': 'January 26, 1952'
+                <br>&ensp;'Name': 'Mimi Leder',
+                <br>&ensp;'Bio': 'Miriam Leder is an American film and television director and producer; she is noted for her action films and use of special effects. She has directed the films The Peacemaker (1997), Deep Impact (1998), Pay It Forward (2000), and On the Basis of Sex (2018). She was the first female graduate of the AFI Conservatory, in 1973. She has been nominated for ten Emmy Awards, winning two',
+                <br>&ensp;'Birth': 'January 26, 1952'
+                <br>&ensp;'Death': null
             <br>}</td>
         </tr>
         <tr>
@@ -78,14 +79,20 @@
             <td>POST</td>
             <td>A JSON object holding data about the user to add, structured like:
                 <br>{
-                    <br>&ensp;name: 'Steve Sims',
-                    <br>&ensp;favoriteMovies: []
+                    <br>&ensp;'Email': 'user1@example.com',
+                    <br>&ensp;'Username': 'user1',
+                    <br>&ensp;'Password': 'password1',
+                    <br>&ensp;'Birtday': '1992-11-23',
+                    <br>&ensp;'FavoriteMovies': []
                 <br>}</td>
             <td>A JSON object holding data about the user that was added, including an ID. Example:
                 <br>{
-                    <br>&ensp;name: 'Steve Sims',
-                    <br>&ensp;id: '5',
-                    <br>&ensp;favoriteMovies: []
+                    <br>&ensp; '_id': ObjectId('65fed25b96ff7fe2a4d14a17')
+                    <br>&ensp;'Email': 'user1@example.com',
+                    <br>&ensp;'Username': 'user1',
+                    <br>&ensp;'Password': 'password1',
+                    <br>&ensp;'Birtday': '1992-11-23',
+                    <br>&ensp;'FavoriteMovies': []
                 <br>}</td>
         </tr>
         <tr>
@@ -94,14 +101,20 @@
             <td>PUT</td>
             <td>A JSON object holding the updated data about the user, structured like:
                 <br>{
-                    <br>&ensp;name: 'Steve Sims Updated',
-                    <br>&ensp;favoriteMovies: []
+                    <br>&ensp;'Email': 'user1@example.com',
+                    <br>&ensp;'Username': 'user1 Updated',
+                    <br>&ensp;'Password': 'password1',
+                    <br>&ensp;'Birtday': '1992-11-23',
+                    <br>&ensp;'FavoriteMovies': []
                 <br>} </td>
             <td>A JSON object holding the updated data about the user, including their ID. Example:
                 <br>{
-                    <br>&ensp;name: 'Steve Sims Updated',
-                    <br>&ensp;id: '5',
-                    <br>&ensp;favoriteMovies: []
+                    <br>&ensp; '_id': ObjectId('65fed25b96ff7fe2a4d14a17')
+                    <br>&ensp;'Email': 'user1@example.com',
+                    <br>&ensp;'Username': 'user1 Updated',
+                    <br>&ensp;'Password': 'password1',
+                    <br>&ensp;'Birtday': '1992-11-23',
+                    <br>&ensp;'FavoriteMovies': []
                 <br>}</td>
         </tr>
         <tr>
