@@ -29,7 +29,7 @@
         </tr>
         <tr>
             <td>Get data about a single movie by title</td>
-            <td>/movies/[title]</td>
+            <td>/movies/:Title</td>
             <td>GET</td>
             <td>None</td>
             <td>A JSON object holding data about the movie, containg the title, description, genre, director of the movie and if the movie is featured. Example: 
@@ -46,12 +46,13 @@
                         <br>&emsp;'Birth': 'August 21, 1944',
                         <br>&emsp;'Death': null
                     <br>&ensp;},
+                    <br>&ensp;'ImagePath': '/the_truman_show.jpg'
                     <br>&ensp;'Featured': true
                 <br>}</td>
         </tr>
         <tr>
             <td>Get data about a genre</td>
-            <td>/movies/genre/[genreName]</td>
+            <td>/movies/Genre/:GenreName</td>
             <td>GET</td>
             <td>None</td>
             <td>A JSON object holding data about a genre, contating the name and description of the genre. Example: 
@@ -62,7 +63,7 @@
         </tr>
         <tr>
             <td>Get data about a single director by name</td>
-            <td>/movies/director/[directorName]</td>
+            <td>/movies/Director/:DirectorName</td>
             <td>GET</td>
             <td>None</td>
             <td>A JSON object holding data about a director, containg the name, bio, birth date and death date of the director. Example:
@@ -82,7 +83,7 @@
                     <br>&ensp;'Email': 'user1@example.com',
                     <br>&ensp;'Username': 'user1',
                     <br>&ensp;'Password': 'password1',
-                    <br>&ensp;'Birtday': '1992-11-23',
+                    <br>&ensp;'Birthday': '1992-11-23',
                     <br>&ensp;'FavoriteMovies': []
                 <br>}</td>
             <td>A JSON object holding data about the user that was added, including an ID. Example:
@@ -91,20 +92,20 @@
                     <br>&ensp;'Email': 'user1@example.com',
                     <br>&ensp;'Username': 'user1',
                     <br>&ensp;'Password': 'password1',
-                    <br>&ensp;'Birtday': '1992-11-23',
+                    <br>&ensp;'Birthday': '1992-11-23',
                     <br>&ensp;'FavoriteMovies': []
                 <br>}</td>
         </tr>
         <tr>
             <td>Update a user's username</td>
-            <td>/users/[id]</td>
+            <td>/users/:Username</td>
             <td>PUT</td>
             <td>A JSON object holding the updated data about the user, structured like:
                 <br>{
                     <br>&ensp;'Email': 'user1@example.com',
                     <br>&ensp;'Username': 'user1 Updated',
                     <br>&ensp;'Password': 'password1',
-                    <br>&ensp;'Birtday': '1992-11-23',
+                    <br>&ensp;'Birthday': '1992-11-23',
                     <br>&ensp;'FavoriteMovies': []
                 <br>} </td>
             <td>A JSON object holding the updated data about the user, including their ID. Example:
@@ -113,27 +114,43 @@
                     <br>&ensp;'Email': 'user1@example.com',
                     <br>&ensp;'Username': 'user1 Updated',
                     <br>&ensp;'Password': 'password1',
-                    <br>&ensp;'Birtday': '1992-11-23',
+                    <br>&ensp;'Birthday': '1992-11-23',
                     <br>&ensp;'FavoriteMovies': []
                 <br>}</td>
         </tr>
         <tr>
             <td>Add a movie to a user's favorites</td>
-            <td>/users/[id]/[movieTitle]</td>
+            <td>/users/:Username/movies/:MovieID</td>
             <td>POST</td>
             <td>None</td>
-            <td>A text message indicating the movie has been added to the user's Favorites.</td>
+            <td>A JSON object holding the updated data about the user, including their ID. Example:
+                <br>{
+                    <br>&ensp; '_id': ObjectId('65fed25b96ff7fe2a4d14a17')
+                    <br>&ensp;'Email': 'user1@example.com',
+                    <br>&ensp;'Username': 'user1 Updated',
+                    <br>&ensp;'Password': 'password1',
+                    <br>&ensp;'Birthday': '1992-11-23',
+                    <br>&ensp;'FavoriteMovies': [65febbca64a88a45cbd14a0e]
+                <br>}</td>
         </tr>
         <tr>
             <td>Remove a movie from a user's favorites</td>
-            <td>/users/[id]/[movieTitle]</td>
+            <td>/users/:Username/movies/:MovieID</td>
             <td>DELETE</td>
             <td>None</td>
-            <td>A text message indicating the movie has been removed from the user's Favorites.</td>
+            <td>A JSON object holding the updated data about the user, including their ID. Example:
+                <br>{
+                    <br>&ensp; '_id': ObjectId('65fed25b96ff7fe2a4d14a17')
+                    <br>&ensp;'Email': 'user1@example.com',
+                    <br>&ensp;'Username': 'user1 Updated',
+                    <br>&ensp;'Password': 'password1',
+                    <br>&ensp;'Birthday': '1992-11-23',
+                    <br>&ensp;'FavoriteMovies': []
+                <br>}</td>
         </tr>
         <tr>
             <td>Remove a user</td>
-            <td>/users/[id]</td>
+            <td>/users/:Username</td>
             <td>DELETE</td>
             <td>None</td>
             <td>A text message indicating the user has been deleted.</td>
