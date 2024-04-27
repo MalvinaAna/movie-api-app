@@ -15,6 +15,11 @@ app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const {check, validationResult}= require('express-validator');
+
+const cors= require('cors');
+app.use(cors());
+
 let auth= require('./auth')(app);
 
 const passport= require('passport');
@@ -80,7 +85,22 @@ app.get('/movies/Director/:DirectorName', passport.authenticate('jwt', {session:
 });
 
 //Add new user
-app.post('/users', async (req,res)=> {
+app.post('/users',
+//Validation logic here for request
+[
+    check('Username', 'Username is required').isLength({min: 5}),
+    check('Username', 'Username contains non alphanumeric characters - not allowed').isAlphanumeric(),
+    check('Password', 'Password is required').not().isEmpty(),
+    check('Email', 'Email does not appear to be valid').isEmail()
+], async (req,res)=> {
+
+    //check the validation object for errors
+    let errors= validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({errors: errors.array()});
+    }
+
+    let hashedPassword= Users.hashPassword(req.body.Password);
     await Users.findOne({Username: req.body.Username})
     .then((user)=> {
         if (user) {
@@ -103,7 +123,21 @@ app.post('/users', async (req,res)=> {
 });
 
 //Update a user's username
-app.put('/users/:Username', passport.authenticate('jwt', {session: false}), async (req, res)=> {
+app.put('/users/:Username', 
+ //Validation logic here for request
+ [
+    check('Username', 'Username is required').isLength({min: 5}),
+    check('Username', 'Username contains non alphanumeric characters - not allowed').isAlphanumeric(),
+    check('Password', 'Password is required').not().isEmpty(),
+    check('Email', 'Email does not appear to be valid').isEmail()
+], passport.authenticate('jwt', {session: false}), async (req, res)=> {
+
+    //check the validation object for errors
+    let errors= validationResult(req);
+    if (!errors.isEmpty()) {
+            return res.status(422).json({errors: errors.array()});
+        }
+
     //Condition to check if the username in the request body matches the one in the request parameter
     if(req.user.Username !== req.params.Username) {
         return res.status(400).send('Permission denied');
@@ -183,6 +217,7 @@ app.use((err, req, res, next)=> {
 });
 
 //listen for requests
-app.listen(8080, ()=> {
-    console.log('App listening on port 8080.');
+const port= process.env.PORT || 8080;
+app.listen(port, '0.0.0.0', ()=> {
+    console.log('Listening on Port ' + port);
 });
