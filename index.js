@@ -26,7 +26,8 @@ const passport= require('passport');
 require('./passport');
 
 //Integrating Mongoose with REST API
-mongoose.connect('mongodb://localhost:27017/cfDB', {useNewUrlParser: true, useUnifiedTopology: true});
+//mongoose.connect('mongodb://localhost:27017/cfDB', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(process.env.CONNECTION_URI, {useNewUrlParser: true, useUnifiedTopology: true});
 
 //Logging with Morgan
 app.use(morgan('common'));
