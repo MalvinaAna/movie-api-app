@@ -9,13 +9,13 @@ bodyParser= require('body-parser'),
 uuid= require('uuid'),
 morgan= require('morgan');
 
+const {check, validationResult}= require('express-validator');
+
 const app= express();
 
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
-
-const {check, validationResult}= require('express-validator');
 
 const cors= require('cors');
 app.use(cors());
