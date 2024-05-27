@@ -97,6 +97,20 @@ app.get('/users', async (req, res)=> {
     });
 });
 
+// Get a user's list of favorite movies
+app.get('/users/:Username/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  try {
+    const user = await Users.findOne({ Username: req.params.Username });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json(user.FavoriteMovies);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  }
+});
+
 //Add new user
 app.post('/users',
 //Validation logic here for request
