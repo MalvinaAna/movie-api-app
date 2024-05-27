@@ -85,6 +85,18 @@ app.get('/movies/Director/:DirectorName', passport.authenticate('jwt', {session:
     });
 });
 
+//Get data about a single use by username
+app.get('/users/:Username', passport.authenticate('jwt', {session: false}), async (req, res)=> {
+  await Users.findOne({'Username': req.params.Username}, {'Username.$': 1})
+  .then((user)=> {
+      res.json(user);
+  })
+  .catch((err)=> {
+      console.error(err);
+      res.status(500).send('Error ' + err);
+  });
+});
+
 //Add new user
 app.post('/users',
 //Validation logic here for request
