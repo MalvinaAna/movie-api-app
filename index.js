@@ -85,6 +85,18 @@ app.get('/movies/Director/:DirectorName', passport.authenticate('jwt', {session:
     });
 });
 
+//Get a list of all users
+app.get('/users', async (req, res)=> {
+    await Users.find()
+    .then((users)=> {
+        res.status(201).json(users);
+    })
+    .catch((err)=> {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+    });
+});
+
 // Get data about a single user by username
 app.get('/users/:Username', passport.authenticate('jwt', { session: false }), async (req, res) => {
   // Extract the username from the JWT token
