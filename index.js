@@ -97,30 +97,6 @@ app.get('/users', async (req, res)=> {
     });
 });
 
-// Get data about a single user by username
-app.get('/users/:Username', passport.authenticate('jwt', { session: false }), async (req, res) => {
-  // Extract the username from the JWT token
-  const authenticatedUsername = req.user.Username;
-
-  // Compare the username in the token with the one in the request parameters
-  if (req.params.Username !== authenticatedUsername) {
-    return res.status(403).send('Error: You are not authorized to access this user\'s data');
-  }
-
-  try {
-    // Fetch the user data from the database
-    const user = await Users.findOne({ Username: req.params.Username });
-    if (user) {
-      res.json(user);
-    } else {
-      res.status(404).send('Error: User not found');
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error: ' + err);
-  }
-});
-
 //Add new user
 app.post('/users',
 //Validation logic here for request
