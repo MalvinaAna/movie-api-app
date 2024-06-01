@@ -9,6 +9,8 @@ bodyParser= require('body-parser'),
 uuid= require('uuid'),
 morgan= require('morgan');
 
+const bcrypt = require('bcrypt');
+
 const {check, validationResult}= require('express-validator');
 
 const app= express();
@@ -169,7 +171,7 @@ app.put('/users/:Username',
  // Validation logic here for request
  [
     check('Username', 'Username is required').isLength({min: 5}),
-    check('Username', 'Username contains non alphanumeric characters - not allowed').isAlphanumeric(),
+    check('Username', 'Username contains non-alphanumeric characters - not allowed').isAlphanumeric(),
     check('Password', 'Password is required').not().isEmpty(),
     check('Email', 'Email does not appear to be valid').isEmail()
 ], passport.authenticate('jwt', {session: false}), async (req, res)=> {
@@ -187,10 +189,13 @@ app.put('/users/:Username',
 
     let updatedUserData = {
         Username: req.body.Username,
-        Password: req.body.Password, 
         Email: req.body.Email,
         Birthday: req.body.Birthday
     };
+
+    if (req.body.Password) {
+        updatedUserData.Password = bcrypt.hashSync(req.body.Password, 10); // Hash the password
+    }
 
     try {
         const updatedUser = await Users.findOneAndUpdate(
@@ -203,21 +208,6 @@ app.put('/users/:Username',
         console.error(err);
         res.status(500).send('Error: ' + err);
     }
-});
-
-//Add a movie to a user's favorites
-app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {session: false}), async (req, res)=> {
-    await Users.findOneAndUpdate({Username: req.params.Username}, {
-        $push: {FavoriteMovies: req.params.MovieID}
-    },
-{new: true}) //This line makes sure that the updated document is returned
-.then((updatedUser)=> {
-    res.json(updatedUser);
-})
-.catch((err)=> {
-    console.error(err);
-    res.status(500).send('Error: ' + err);
-});
 });
 
 //Remove a movie from a user's favorites
