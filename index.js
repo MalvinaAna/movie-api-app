@@ -165,9 +165,8 @@ app.post('/users',
     });
 });
 
-//Update a user's username
 app.put('/users/:Username', 
- //Validation logic here for request
+ // Validation logic here for request
  [
     check('Username', 'Username is required').isLength({min: 5}),
     check('Username', 'Username contains non alphanumeric characters - not allowed').isAlphanumeric(),
@@ -175,33 +174,35 @@ app.put('/users/:Username',
     check('Email', 'Email does not appear to be valid').isEmail()
 ], passport.authenticate('jwt', {session: false}), async (req, res)=> {
 
-    //check the validation object for errors
-    let errors= validationResult(req);
+    // Check the validation object for errors
+    let errors = validationResult(req);
     if (!errors.isEmpty()) {
-            return res.status(422).json({errors: errors.array()});
-        }
+        return res.status(422).json({ errors: errors.array() });
+    }
 
-    //Condition to check if the username in the request body matches the one in the request parameter
-    if(req.user.Username !== req.params.Username) {
+    // Condition to check if the username in the request body matches the one in the request parameter
+    if (req.user.Username !== req.params.Username) {
         return res.status(400).send('Permission denied');
     }
-    //Condition ends here
-    await Users.findOneAndUpdate({Username: req.params.Username}, {$set: 
-    {
+
+    let updatedUserData = {
         Username: req.body.Username,
         Password: req.body.Password, 
         Email: req.body.Email,
         Birthday: req.body.Birthday
+    };
+
+    try {
+        const updatedUser = await Users.findOneAndUpdate(
+            { Username: req.params.Username },
+            { $set: updatedUserData },
+            { new: true }
+        );
+        res.json(updatedUser);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
     }
-},
-{new: true}) //This line makes sure that the updated document is returned
-.then((updatedUser)=> {
-    res.json(updatedUser);
-})
-.catch((err)=> {
-    console.error(err);
-    res.status(500).send('Error: ' + err);
-})
 });
 
 //Add a movie to a user's favorites
