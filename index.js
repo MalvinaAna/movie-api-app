@@ -97,6 +97,21 @@ app.get('/users', async (req, res)=> {
     });
 });
 
+//Get a user by username
+app.get('/users/:Username', passport.authenticate('jwt', { session: false }), async (req, res)=> {
+  await Users.findOne({ Username: req.params.Username })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+      res.json(user);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
+
 // Get a user's list of favorite movies
 app.get('/users/:Username/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
