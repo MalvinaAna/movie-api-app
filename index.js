@@ -168,24 +168,18 @@ app.post('/users',
 });
 
 // Add a movie to a user's favorites
-app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), async (req, res) => {
-  try {
-    const movieId = req.params.MovieID;
-    const user = await Users.findOne({ Username: req.params.Username });
-    
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    // Add the movie to the user's favorites
-    user.FavoriteMovies.push(movieId);
-    await user.save();
-
-    res.status(201).json(user);
-  } catch (err) {
+app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {session: false}), async (req, res)=> {
+    await Users.findOneAndUpdate({Username: req.params.Username}, {
+        $push: {FavoriteMovies: req.params.MovieID}
+    },
+{new: true})
+.then((updatedUser)=> {
+    res.json(updatedUser);
+})
+.catch((err)=> {
     console.error(err);
     res.status(500).send('Error: ' + err);
-  }
+});
 });
 
 //Update user profile
