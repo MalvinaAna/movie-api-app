@@ -94,7 +94,3 @@ Error responses typically include a message field to help diagnose issues.
 
 ## License
 This project is licensed under the MIT License.
-
----
-
-This README provides setup, usage, and endpoint documentation for easy deployment and testing. You can adjust specific fields (like URIs and descriptions) as needed. Let me know if you want any additional details included!
