@@ -9,6 +9,8 @@ bodyParser= require('body-parser'),
 uuid= require('uuid'),
 morgan= require('morgan');
 
+const bcrypt = require('bcrypt');
+
 const {check, validationResult}= require('express-validator');
 
 const app= express();
@@ -51,7 +53,7 @@ app.get('/', (req, res)=> {
  * @param {Object} res - Express response object.
  * @returns {Object[]} movies - List of all movies.
  */
-app.get('/movies', async (req, res)=> {
+app.get('/movies', passport.authenticate('jwt', {session: false}), async (req, res)=> {
     await Movies.find()
     .then((movies)=> {
         res.status(201).json(movies);
@@ -118,6 +120,69 @@ app.get('/movies/Director/:DirectorName', passport.authenticate('jwt', {session:
         res.status(500).send('Error ' + err);
     });
 });
+
+/**
+ * Get a list of all users.
+ * @name GET /users
+ * @function
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Object[]} users - List of all users.
+ */
+app.get('/users', async (req, res)=> {
+    await Users.find()
+    .then((users)=> {
+        res.status(201).json(users);
+    })
+    .catch((err)=> {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+    });
+});
+
+/**
+ * Get a user by username.
+ * @name GET /users/:Username
+ * @function
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Object} user - User data for the specified username.
+ */
+app.get('/users/:Username', passport.authenticate('jwt', { session: false }), async (req, res)=> {
+  await Users.findOne({ Username: req.params.Username })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+      res.json(user);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
+
+/**
+ * Get a user's list of favorite movies.
+ * @name GET /users/:Username/movies
+ * @function
+ * @param {Object} req - Express request object.
+ * @param {Object} res - Express response object.
+ * @returns {Object[]} FavoriteMovies - List of favorite movies for the specified user.
+ */
+app.get('/users/:Username/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  try {
+    const user = await Users.findOne({ Username: req.params.Username });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json(user.FavoriteMovies);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  }
+});
+
 
 /**
  * Add a new user.
@@ -223,7 +288,7 @@ app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {sessi
     await Users.findOneAndUpdate({Username: req.params.Username}, {
         $push: {FavoriteMovies: req.params.MovieID}
     },
-{new: true}) //This line makes sure that the updated document is returned
+{new: true})
 .then((updatedUser)=> {
     res.json(updatedUser);
 })
