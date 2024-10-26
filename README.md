@@ -56,7 +56,6 @@ This project is a RESTful API built with Node.js, Express, and MongoDB, designed
    ```bash
    npm start
    ```
-   The server will be running on `http://localhost:8080` by default.
 
 ## Endpoints
 
