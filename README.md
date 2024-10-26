@@ -1,8 +1,4 @@
-Here’s a sample README file for the [Movie API App](https://github.com/MalvinaAna/movie-api-app) repository, including sections for setup, usage, and more.
-
----
-
-# Movie API App
+# Movie-api-app
 
 This project is a RESTful API built with Node.js, Express, and MongoDB, designed to serve as the backend for a movie application. It allows users to register, authenticate, and access a collection of movies, including detailed information on genres and directors. Users can manage their profiles and create lists of favorite movies.
 
