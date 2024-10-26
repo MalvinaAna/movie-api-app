@@ -119,6 +119,7 @@ app.get('/movies/Director/:DirectorName', passport.authenticate('jwt', {session:
     });
 });
 
+<<<<<<< HEAD
 /**
  * Get data about a single user by username.
  * @name GET /users/:Username
@@ -135,15 +136,28 @@ app.get('/users/:Username', passport.authenticate('jwt', { session: false }), as
   if (req.params.Username !== authenticatedUsername) {
     return res.status(403).send('Error: You are not authorized to access this user\'s data');
   }
+=======
+//Get a list of all users
+app.get('/users', async (req, res)=> {
+    await Users.find()
+    .then((users)=> {
+        res.status(201).json(users);
+    })
+    .catch((err)=> {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+    });
+});
+>>>>>>> a92330fe4de81d6eaca4056508c21c0f4de19d87
 
+// Get a user's list of favorite movies
+app.get('/users/:Username/movies', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
-    // Fetch the user data from the database
     const user = await Users.findOne({ Username: req.params.Username });
-    if (user) {
-      res.json(user);
-    } else {
-      res.status(404).send('Error: User not found');
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
     }
+    res.json(user.FavoriteMovies);
   } catch (err) {
     console.error(err);
     res.status(500).send('Error: ' + err);
