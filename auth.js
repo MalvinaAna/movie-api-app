@@ -5,6 +5,12 @@ const jwt = require('jsonwebtoken'),
 
   require('./passport'); // Simply require the passport file
 
+/**
+ * Generates a JSON Web Token (JWT) for a given user.
+ * @param {Object} user - The user object containing the user's information.
+ * @param {string} user.Username - The username of the user to encode in the JWT.
+ * @returns {string} - The signed JWT as a string.
+ */
 
 let generateJWTToken = (user) => {
   return jwt.sign(user, jwtSecret, {
@@ -14,6 +20,11 @@ let generateJWTToken = (user) => {
   });
 }
 
+/**
+ * POST login route. Authenticates the user and generates a JWT upon successful login.
+ * @param {Object} router - The Express router object.
+ * @returns {void}
+ */
 
 /* POST login. */
 module.exports = (router) => {
